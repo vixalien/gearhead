@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/login.dart';
+import 'screens/signup.dart';
 import 'screens/screen2.dart';
 import 'screens/screen3.dart';
 
@@ -18,12 +19,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-
-
-
       home: const MyHomePage(title: 'Gearhead Home'),
       routes: {
         '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
         '/screen2': (context) => const Screen2(),
         '/screen3': (context) => const Screen3(),
       },
@@ -50,21 +49,14 @@ class MyHomePage extends StatelessWidget {
 
   // Array of screens for navigation
   final List<ScreenItem> screens = const [
+    ScreenItem(title: 'Screen 1 (Login)', route: '/login', icon: Icons.login),
     ScreenItem(
-      title: 'Screen 1 (Login)',
-      route: '/login',
-      icon: Icons.login,
+      title: 'Screen 2 (Signup)',
+      route: '/signup',
+      icon: Icons.person_add,
     ),
-    ScreenItem(
-      title: 'Screen 2',
-      route: '/screen2',
-      icon: Icons.dashboard,
-    ),
-    ScreenItem(
-      title: 'Screen 3',
-      route: '/screen3',
-      icon: Icons.settings,
-    ),
+    ScreenItem(title: 'Screen 3', route: '/screen2', icon: Icons.dashboard),
+    ScreenItem(title: 'Screen 4', route: '/screen3', icon: Icons.settings),
   ];
 
   void _navigateToScreen(BuildContext context, String route) {
@@ -85,18 +77,11 @@ class MyHomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const Icon(
-                Icons.home,
-                size: 80,
-                color: Colors.deepPurple,
-              ),
+              const Icon(Icons.home, size: 80, color: Colors.deepPurple),
               const SizedBox(height: 32),
               const Text(
                 'Welcome to Gearhead',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -107,17 +92,19 @@ class MyHomePage extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               // Generate buttons from the screens array
-              ...screens.map((screen) => Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: ElevatedButton.icon(
-                      onPressed: () => _navigateToScreen(context, screen.route),
-                      icon: Icon(screen.icon),
-                      label: Text(screen.title),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
+              ...screens.map(
+                (screen) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: ElevatedButton.icon(
+                    onPressed: () => _navigateToScreen(context, screen.route),
+                    icon: Icon(screen.icon),
+                    label: Text(screen.title),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                  )),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

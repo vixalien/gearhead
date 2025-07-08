@@ -37,20 +37,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleFacebookLogin() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Facebook login functionality coming soon!')),
+      const SnackBar(
+        content: Text('Facebook login functionality coming soon!'),
+      ),
     );
   }
 
   void _handleForgotPassword() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Forgot password functionality coming soon!')),
+      const SnackBar(
+        content: Text('Forgot password functionality coming soon!'),
+      ),
     );
   }
 
   void _handleSignUp() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Sign up functionality coming soon!')),
-    );
+    Navigator.pushNamed(context, '/signup');
   }
 
   @override
