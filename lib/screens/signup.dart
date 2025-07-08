@@ -44,7 +44,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _handleSignIn() {
-    Navigator.pop(context);
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   Future<void> _selectDate() async {
@@ -66,13 +66,21 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 60),
+              const SizedBox(height: 20),
 
               // Logo placeholder
               const Text(
