@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gearhead/screens/create_password.dart';
+import 'package:gearhead/screens/reset_password_info.dart';
+import 'package:gearhead/screens/verify_code.dart';
 import 'screens/login.dart';
 import 'screens/signup.dart';
 import 'screens/screen2.dart';
 import 'screens/screen3.dart';
+import 'screens/forgot_password.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Gearhead App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -25,6 +30,10 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const SignupScreen(),
         '/screen2': (context) => const Screen2(),
         '/screen3': (context) => const Screen3(),
+        '/forgot_password': (context) => const ForgotPassword(),
+        '/verify_code': (context) => const VerifyCode(),
+        '/reset_password_info': (context) => const ResetPasswordInfo(),
+        '/create_password': (context) => const CreatePassword(),
       },
     );
   }
