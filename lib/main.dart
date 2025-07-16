@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gearhead/screens/create_password.dart';
+import 'package:gearhead/screens/reset_password_info.dart';
+import 'package:gearhead/screens/verify_code.dart';
 import 'screens/login.dart';
 import 'screens/signup.dart';
 import 'screens/homepage.dart';
 import 'screens/profile.dart';
+import 'screens/forgot_password.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Gearhead App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -25,6 +30,10 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const SignupScreen(),
         '/homepage': (context) => const HomepageScreen(),
         '/profile': (context) => const ProfileScreen(),
+        '/forgot_password': (context) => const ForgotPassword(),
+        '/verify_code': (context) => const VerifyCode(),
+        '/reset_password_info': (context) => const ResetPasswordInfo(),
+        '/create_password': (context) => const CreatePassword(),
       },
     );
   }
@@ -50,7 +59,11 @@ class MyHomePage extends StatelessWidget {
   // Array of screens for navigation
   final List<ScreenItem> screens = const [
     ScreenItem(title: 'Screen 1 (Login)', route: '/login', icon: Icons.login),
-    ScreenItem(title: 'Screen 2 (Signup)', route: '/signup', icon: Icons.person_add),
+    ScreenItem(
+      title: 'Screen 2 (Signup)',
+      route: '/signup',
+      icon: Icons.person_add,
+    ),
     ScreenItem(title: 'Homepage', route: '/homepage', icon: Icons.home),
     ScreenItem(title: 'Profile', route: '/profile', icon: Icons.person),
   ];

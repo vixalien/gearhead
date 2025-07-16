@@ -44,11 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleForgotPassword() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Forgot password functionality coming soon!'),
-      ),
-    );
+    Navigator.pushReplacementNamed(context, '/forgot_password');
   }
 
   void _handleSignUp() {
