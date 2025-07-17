@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'screens/login.dart';
 import 'screens/signup.dart';
-import 'screens/screen2.dart';
-import 'screens/screen3.dart';
+import 'screens/homepage.dart';
+import 'screens/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/screen2': (context) => const Screen2(),
-        '/screen3': (context) => const Screen3(),
+        '/homepage': (context) => const HomepageScreen(),
+        '/profile': (context) => const ProfileScreen(),
       },
     );
   }
@@ -50,13 +50,9 @@ class MyHomePage extends StatelessWidget {
   // Array of screens for navigation
   final List<ScreenItem> screens = const [
     ScreenItem(title: 'Screen 1 (Login)', route: '/login', icon: Icons.login),
-    ScreenItem(
-      title: 'Screen 2 (Signup)',
-      route: '/signup',
-      icon: Icons.person_add,
-    ),
-    ScreenItem(title: 'Screen 3', route: '/screen2', icon: Icons.dashboard),
-    ScreenItem(title: 'Screen 4', route: '/screen3', icon: Icons.settings),
+    ScreenItem(title: 'Screen 2 (Signup)', route: '/signup', icon: Icons.person_add),
+    ScreenItem(title: 'Homepage', route: '/homepage', icon: Icons.home),
+    ScreenItem(title: 'Profile', route: '/profile', icon: Icons.person),
   ];
 
   void _navigateToScreen(BuildContext context, String route) {
