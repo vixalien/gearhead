@@ -4,7 +4,7 @@ import 'package:gearhead/screens/reset_password_info.dart';
 import 'package:gearhead/screens/verify_code.dart';
 import 'screens/login.dart';
 import 'screens/signup.dart';
-import 'screens/screen2.dart';
+import 'screens/create_post.dart';
 import 'screens/screen3.dart';
 import 'screens/forgot_password.dart';
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/screen2': (context) => const Screen2(),
+        '/create_post': (context) => const CreatePostScreen(),
         '/screen3': (context) => const Screen3(),
         '/forgot_password': (context) => const ForgotPassword(),
         '/verify_code': (context) => const VerifyCode(),
@@ -64,8 +64,8 @@ class MyHomePage extends StatelessWidget {
       route: '/signup',
       icon: Icons.person_add,
     ),
-    ScreenItem(title: 'Screen 3', route: '/screen2', icon: Icons.dashboard),
-    ScreenItem(title: 'Screen 4', route: '/screen3', icon: Icons.settings),
+    ScreenItem(title: 'Create Post', route: '/create_post', icon: Icons.dashboard),
+    ScreenItem(title: 'Screen 3', route: '/screen3', icon: Icons.settings),
   ];
 
   void _navigateToScreen(BuildContext context, String route) {
