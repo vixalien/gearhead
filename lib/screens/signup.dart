@@ -73,6 +73,7 @@ class _SignupScreenState extends State<SignupScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
+        title: Text("Create an account"),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -80,32 +81,7 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-
-              // Logo placeholder
-              const Text(
-                'Logo Placeholder',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-
-              const SizedBox(height: 48),
-
-              // Create account title
-              const Text(
-                'Create an\nAccount',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  height: 1.2,
-                ),
-              ),
-
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
 
               // Form
               Form(

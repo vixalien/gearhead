@@ -62,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
+        title: Text("Sign in to your account"),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -70,31 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-
-              // Logo placeholder
-              const Text(
-                'Logo Placeholder',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-
-              const SizedBox(height: 48),
-
-              // Sign in title
-              const Text(
-                'Sign in to your\nAccount',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  height: 1.2,
-                ),
-              ),
-
-              const SizedBox(height: 40),
 
               // Form
               Form(
