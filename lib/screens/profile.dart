@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/bottom_navigation.dart';
 import '../components/navigation_handler.dart';
+import '../services/auth_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -11,6 +12,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 4; // Settings tab is at index 4
+  final AuthService _authService = AuthService();
+  bool _isLoading = false;
 
   // Sample car images - in a real app, these would come from a database or API
   final List<String> carImages = const [
@@ -24,6 +27,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
     'https://images.unsplash.com/photo-1549399084-d5db0b30e5d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
   ];
+
+  void _handleLogout() async {
+    // Show confirmation dialog
+    final bool? shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+
+    // If user confirmed logout
+    if (shouldLogout == true) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _authService.signOut();
+        // Navigate to splash screen after logout
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/splash',
+            (route) => false,
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,16 +104,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: false,
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: Colors.black,
-              size: 26,
-            ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Settings coming soon!')),
-              );
-            },
+            icon: const Icon(Icons.logout, color: Colors.black, size: 26),
+            onPressed: _isLoading ? null : _handleLogout,
           ),
         ],
       ),
@@ -83,12 +132,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             const SizedBox(height: 12),
 
                             // Username
-                            const Text(
-                              'IMARAGAHINDA Aimee Gloire',
-                              style: TextStyle(
+                            Text(
+                              _authService.getUserDisplayName() ??
+                                  'Anonymous User',
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            // Email
+                            Text(
+                              _authService.getUserEmail() ?? '',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
                               ),
                             ),
                           ],

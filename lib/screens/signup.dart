@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../services/auth_service.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -19,6 +20,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  bool _isLoading = false;
+  final AuthService _authService = AuthService();
 
   @override
   void dispose() {
@@ -31,12 +34,51 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  void _handleSignUp() {
+  void _handleSignUp() async {
     if (_formKey.currentState!.validate()) {
-      // Handle signup logic here
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign up functionality coming soon!')),
-      );
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        // Create user account - Firebase automatically logs in the user
+        final userCredential = await _authService
+            .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+              firstName: _firstNameController.text.trim(),
+              lastName: _lastNameController.text.trim(),
+            );
+
+        if (mounted) {
+          if (userCredential != null && userCredential.user != null) {
+            // User is automatically logged in, navigate to homepage
+            Navigator.pushReplacementNamed(context, '/homepage');
+          } else {
+            // Account created but user not logged in, redirect to login
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Account created successfully! Please log in.'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 3),
+              ),
+            );
+            Navigator.pushReplacementNamed(context, '/login');
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
     }
   }
 
@@ -53,7 +95,7 @@ class _SignupScreenState extends State<SignupScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushReplacementNamed(context, '/splash'),
         ),
         title: Text("Create an account"),
       ),
@@ -367,7 +409,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: _handleSignUp,
+                        onPressed: _isLoading ? null : _handleSignUp,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           foregroundColor: Colors.white,
@@ -376,13 +418,24 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                            : const Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                       ),
                     ),
 

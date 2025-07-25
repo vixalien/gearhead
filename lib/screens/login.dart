@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +13,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
+  final AuthService _authService = AuthService();
 
   @override
   void dispose() {
@@ -20,12 +23,34 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _handleLogin() {
+  void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      // Handle login logic here
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login functionality coming soon!')),
-      );
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _authService.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+        // Navigate to homepage on successful login
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/homepage');
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
     }
   }
 
@@ -60,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushReplacementNamed(context, '/splash'),
         ),
         title: Text("Sign in to your account"),
       ),
@@ -212,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: _handleLogin,
+                        onPressed: _isLoading ? null : _handleLogin,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           foregroundColor: Colors.white,
@@ -221,13 +246,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           elevation: 0,
                         ),
-                        child: const Text(
-                          'Log in',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                            : const Text(
+                                'Log in',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                       ),
                     ),
 
