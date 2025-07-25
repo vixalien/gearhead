@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import '/screens/create_password.dart';
-import '/screens/reset_password_info.dart';
-import '/screens/verify_code.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+import 'screens/create_password.dart';
+import 'screens/reset_password_info.dart';
+import 'screens/verify_code.dart';
 import 'screens/login.dart';
 import 'screens/signup.dart';
 import 'screens/homepage.dart';
@@ -9,7 +12,9 @@ import 'screens/profile.dart';
 import 'screens/forgot_password.dart';
 import 'screens/create_post.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
