@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gearhead/screens/create_password.dart';
 import 'package:gearhead/screens/reset_password_info.dart';
 import 'package:gearhead/screens/verify_code.dart';
+import 'package:gearhead/screens/create_password.dart';
+import 'package:gearhead/screens/reset_password_info.dart';
+import 'package:gearhead/screens/verify_code.dart';
 import 'screens/login.dart';
 import 'screens/signup.dart';
-import 'screens/create_post.dart';
-import 'screens/screen3.dart';
+import 'screens/homepage.dart';
+import 'screens/profile.dart';
 import 'screens/forgot_password.dart';
 
 void main() {
@@ -28,8 +31,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/create_post': (context) => const CreatePostScreen(),
-        '/screen3': (context) => const Screen3(),
+        '/homepage': (context) => const HomepageScreen(),
+        '/profile': (context) => const ProfileScreen(),
         '/forgot_password': (context) => const ForgotPassword(),
         '/verify_code': (context) => const VerifyCode(),
         '/reset_password_info': (context) => const ResetPasswordInfo(),
@@ -64,8 +67,8 @@ class MyHomePage extends StatelessWidget {
       route: '/signup',
       icon: Icons.person_add,
     ),
-    ScreenItem(title: 'Create Post', route: '/create_post', icon: Icons.dashboard),
-    ScreenItem(title: 'Screen 3', route: '/screen3', icon: Icons.settings),
+    ScreenItem(title: 'Homepage', route: '/homepage', icon: Icons.home),
+    ScreenItem(title: 'Profile', route: '/profile', icon: Icons.person),
   ];
 
   void _navigateToScreen(BuildContext context, String route) {
