@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gearhead/screens/create_password.dart';
-import 'package:gearhead/screens/reset_password_info.dart';
-import 'package:gearhead/screens/verify_code.dart';
-import 'package:gearhead/screens/create_password.dart';
-import 'package:gearhead/screens/reset_password_info.dart';
-import 'package:gearhead/screens/verify_code.dart';
+import '/screens/create_password.dart';
+import '/screens/reset_password_info.dart';
+import '/screens/verify_code.dart';
 import 'screens/login.dart';
 import 'screens/signup.dart';
 import 'screens/homepage.dart';
 import 'screens/profile.dart';
 import 'screens/forgot_password.dart';
+import 'screens/create_post.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/verify_code': (context) => const VerifyCode(),
         '/reset_password_info': (context) => const ResetPasswordInfo(),
         '/create_password': (context) => const CreatePassword(),
+        '/create_post': (context) => const CreatePostScreen(),
       },
     );
   }
