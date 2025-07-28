@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyCode extends StatefulWidget {
   const VerifyCode({super.key});
@@ -8,59 +9,16 @@ class VerifyCode extends StatefulWidget {
 }
 
 class _VerifyCodeState extends State<VerifyCode> {
-  final List<FocusNode> _focusNodes = List.generate(5, (_) => FocusNode());
-  final List<TextEditingController> _controllers = List.generate(
-    5,
-    (_) => TextEditingController(),
-  );
-
-  @override
-  void dispose() {
-    for (final controller in _controllers) {
-      controller.dispose();
-    }
-    for (final focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
-    super.dispose();
-  }
+  String currentText = "";
 
   void _verifyCode() {
-    String code = _controllers.map((c) => c.text).join();
-    if (code.length < 5 || code.contains(RegExp(r'\D'))) {
+    if (currentText.length != 5 || currentText.contains(RegExp(r'\D'))) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter a valid 5-digit code')),
       );
       return;
     }
-
     Navigator.pushNamed(context, '/reset_password_info');
-  }
-
-  void _onDigitEntered(int index, String value) {
-    if (value.length == 1 && index < 4) {
-      _focusNodes[index + 1].requestFocus();
-    } else if (value.isEmpty && index > 0) {
-      _focusNodes[index - 1].requestFocus();
-    }
-  }
-
-  Widget _buildDigitField(int index) {
-    return SizedBox(
-      width: 50,
-      child: TextField(
-        controller: _controllers[index],
-        focusNode: _focusNodes[index],
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        maxLength: 1,
-        onChanged: (value) => _onDigitEntered(index, value),
-        decoration: InputDecoration(
-          counterText: '',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-      ),
-    );
   }
 
   @override
@@ -71,7 +29,6 @@ class _VerifyCodeState extends State<VerifyCode> {
         padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
@@ -79,24 +36,34 @@ class _VerifyCodeState extends State<VerifyCode> {
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 48),
-
               const Text(
                 'Check your email',
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-
               const Text(
-                'We sent a resent link to johndoe@gmail.com, Enter a 5-digit code mentioned in the email.',
+                'We sent a recent link to johndoe@gmail.com. Enter the 5-digit code mentioned in the email.',
                 style: TextStyle(fontSize: 14, color: Colors.grey),
-                textAlign: TextAlign.start,
               ),
               const SizedBox(height: 32),
 
-              // Horizontal input fields
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(5, _buildDigitField),
+              // OTP Input
+              PinCodeTextField(
+                appContext: context,
+                length: 5,
+                autoFocus: true,
+                keyboardType: TextInputType.number,
+                animationType: AnimationType.fade,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(8),
+                  fieldHeight: 60,
+                  fieldWidth: 50,
+                  activeColor: Colors.blue,
+                  selectedColor: Colors.blueAccent,
+                  inactiveColor: Colors.grey,
+                ),
+                onChanged: (value) => currentText = value,
               ),
 
               const SizedBox(height: 40),
@@ -105,14 +72,14 @@ class _VerifyCodeState extends State<VerifyCode> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
+                  onPressed: _verifyCode,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1D61E7),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: _verifyCode,
                   child: const Text('Verify Code'),
                 ),
               ),

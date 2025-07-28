@@ -19,8 +19,10 @@ class NavigationHandler {
         break;
       case 2:
         // Navigate to add
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Add functionality coming soon!')),
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/create_post',
+          (route) => false,
         );
         break;
       case 3:
