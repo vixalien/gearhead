@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../components/bottom_navigation.dart';
+import '../components/navigation_handler.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});
@@ -10,6 +12,8 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
+  int _selectedIndex = 2;
+
   bool isPicturePost = true;
   XFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -53,7 +57,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         ).showSnackBar(const SnackBar(content: Text('Please select an image')));
         return;
       }
-      
     } else {
       // Handle event post
       if (_titleController.text.isEmpty ||
@@ -64,7 +67,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         );
         return;
       }
-      
     }
 
     ScaffoldMessenger.of(
@@ -121,6 +123,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigation(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          NavigationHandler.handleNavigation(context, index);
+        },
       ),
     );
   }
