@@ -120,21 +120,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               ),
               onPressed: () => Navigator.pop(context),
             ),
-            actions: [
-              IconButton(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.share, color: Colors.white),
-                ),
-                onPressed: () {
-                  // Share functionality
-                },
-              ),
-            ],
+            actions: [],
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,

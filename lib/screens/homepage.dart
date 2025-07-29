@@ -272,16 +272,6 @@ class _PostWidgetState extends State<PostWidget> {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle share tap
-                      },
-                      child: const Icon(
-                        Icons.share_outlined,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 8),

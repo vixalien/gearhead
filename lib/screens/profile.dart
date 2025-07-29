@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../components/bottom_navigation.dart';
 import '../components/navigation_handler.dart';
 import '../services/auth_service.dart';
+import 'car_spot_details.dart';
+import 'event_details.dart';
+import 'quest_details.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,22 +20,85 @@ class _ProfileScreenState extends State<ProfileScreen>
   late TabController _tabController;
 
   // Sample user data
-  final List<String> userSpots = [
-    'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1571068316344-75bc76f77890?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+  // Sample user spots data with details
+  final List<Map<String, dynamic>> userSpots = [
+    {
+      'id': 'spot_1',
+      'image':
+          'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      'carMake': 'Toyota',
+      'carModel': 'Mark II',
+      'carYear': '1995',
+      'description':
+          'Beautiful JZX90 spotted downtown! Love the stance and wheels setup.',
+      'location': 'KN 4 Avenue, Kigali',
+      'timeAgo': '2 hours ago',
+      'likes': 24,
+      'comments': 8,
+      'isLiked': false,
+    },
+    {
+      'id': 'spot_2',
+      'image':
+          'https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      'carMake': 'Subaru',
+      'carModel': 'WRX STI',
+      'carYear': '2018',
+      'description':
+          'Rally-bred beast spotted at the mall. That Subaru rumble! 🔥',
+      'location': 'Kigali City Tower',
+      'timeAgo': '4 hours ago',
+      'likes': 31,
+      'comments': 12,
+      'isLiked': true,
+    },
   ];
 
-  final List<String> userEvents = [
-    'https://images.unsplash.com/photo-1580414155545-c4726a5bd81f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1549399084-d5db0b30e5d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+  // Sample user events data with details
+  final List<Map<String, dynamic>> userEvents = [
+    {
+      'id': 'event_1',
+      'title': 'Toyota Meet Kigali',
+      'description':
+          'Monthly Toyota owners meetup. Bring your ride and meet fellow Toyota enthusiasts! Food, music, and great vibes.',
+      'organizer': 'Current User',
+      'organizerAvatar':
+          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      'eventImage':
+          'https://images.unsplash.com/photo-1580414155545-c4726a5bd81f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      'eventType': 'Car Meet',
+      'location': 'Amahoro Stadium Parking',
+      'eventDate': 'Jan 20, 2025',
+      'startTime': '10:00 AM',
+      'endTime': '4:00 PM',
+      'attendees': 45,
+      'maxAttendees': 100,
+      'entryFee': 5000,
+      'isAttending': true,
+    },
   ];
 
-  final List<String> userQuests = [
-    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+  // Sample user quests data with details
+  final List<Map<String, dynamic>> userQuests = [
+    {
+      'id': 'quest_1',
+      'title': 'Need help with turbo installation',
+      'description':
+          'Looking for an experienced mechanic to help install a turbo kit on my Toyota Mark II. Have all the parts, just need skilled hands.',
+      'author': 'Current User',
+      'authorAvatar':
+          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+      'questType': 'Help Request',
+      'skillRequired': 'Turbo Installation',
+      'location': 'Kimisagara, Kigali',
+      'payment': 50000,
+      'urgency': 'Medium',
+      'timeAgo': '2 hours ago',
+      'responses': 3,
+      'status': 'Open',
+      'carMake': 'Toyota',
+      'carModel': 'Mark II',
+    },
   ];
 
   @override
@@ -200,7 +266,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-  Widget _buildGridView(List<String> items, String emptyMessage) {
+  Widget _buildGridView(List<Map<String, dynamic>> items, String emptyMessage) {
     if (items.isEmpty) {
       return Center(
         child: Column(
@@ -243,7 +309,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(items[index]),
+                image: NetworkImage(_getImageForTab(items[index])),
                 fit: BoxFit.cover,
               ),
             ),
@@ -257,20 +323,100 @@ class _ProfileScreenState extends State<ProfileScreen>
     final currentTab = _tabController.index;
     switch (currentTab) {
       case 0: // Car Spots
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Navigate to car spot ${index + 1}')),
-        );
+        if (index < userSpots.length) {
+          final spot = userSpots[index];
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CarSpotDetailsScreen(
+                spotId: spot['id']!,
+                username: _authService.getUserDisplayName() ?? 'Current User',
+                userAvatar:
+                    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+                carImage: spot['image']!,
+                carMake: spot['carMake']!,
+                carModel: spot['carModel']!,
+                carYear: spot['carYear']!,
+                description: spot['description']!,
+                location: spot['location']!,
+                timeAgo: spot['timeAgo']!,
+                initialLikes: spot['likes']!,
+                comments: spot['comments']!,
+                initialIsLiked: spot['isLiked']!,
+              ),
+            ),
+          );
+        }
         break;
       case 1: // Events
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Navigate to event ${index + 1}')),
-        );
+        if (index < userEvents.length) {
+          final event = userEvents[index];
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventDetailsScreen(
+                eventId: event['id']!,
+                title: event['title']!,
+                description: event['description']!,
+                organizer: event['organizer']!,
+                organizerAvatar: event['organizerAvatar']!,
+                eventImage: event['eventImage']!,
+                eventType: event['eventType']!,
+                location: event['location']!,
+                eventDate: event['eventDate']!,
+                startTime: event['startTime']!,
+                endTime: event['endTime']!,
+                attendees: event['attendees']!,
+                maxAttendees: event['maxAttendees']!,
+                entryFee: event['entryFee']!,
+                isAttending: event['isAttending']!,
+              ),
+            ),
+          );
+        }
         break;
       case 2: // Quests
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Navigate to quest ${index + 1}')),
-        );
+        if (index < userQuests.length) {
+          final quest = userQuests[index];
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => QuestDetailsScreen(
+                questId: quest['id']!,
+                title: quest['title']!,
+                description: quest['description']!,
+                author: quest['author']!,
+                authorAvatar: quest['authorAvatar']!,
+                questType: quest['questType']!,
+                skillRequired: quest['skillRequired']!,
+                location: quest['location']!,
+                payment: quest['payment']!,
+                urgency: quest['urgency']!,
+                timeAgo: quest['timeAgo']!,
+                responses: quest['responses']!,
+                status: quest['status']!,
+                carMake: quest['carMake']!,
+                carModel: quest['carModel']!,
+              ),
+            ),
+          );
+        }
         break;
+    }
+  }
+
+  String _getImageForTab(Map<String, dynamic> item) {
+    final currentTab = _tabController.index;
+    switch (currentTab) {
+      case 0: // Car Spots
+        return item['image'] ?? '';
+      case 1: // Events
+        return item['eventImage'] ?? '';
+      case 2: // Quests
+        return item['image'] ??
+            'https://images.unsplash.com/photo-1571068316344-75bc76f77890?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80';
+      default:
+        return '';
     }
   }
 

@@ -3,6 +3,7 @@ import '../components/bottom_navigation.dart';
 import '../components/navigation_handler.dart';
 import '../components/comments_bottom_sheet.dart';
 import 'user_profile.dart';
+import 'car_spot_details.dart';
 
 class CarSpotsScreen extends StatefulWidget {
   const CarSpotsScreen({super.key});
@@ -198,239 +199,255 @@ class CarSpotWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 0,
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CarSpotDetailsScreen(
+              spotId: carSpot.id,
+              username: carSpot.username,
+              userAvatar: carSpot.userAvatar,
+              carImage: carSpot.carImage,
+              carMake: carSpot.carMake,
+              carModel: carSpot.carModel,
+              carYear: carSpot.carYear,
+              description: carSpot.description,
+              location: carSpot.location,
+              timeAgo: carSpot.timeAgo,
+              initialLikes: carSpot.likes,
+              comments: carSpot.comments,
+              initialIsLiked: carSpot.isLiked,
+            ),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header with user info
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserProfileScreen(
-                          userId: carSpot.id,
-                          username: carSpot.username,
-                          userAvatar: carSpot.userAvatar,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 0,
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header with user info
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserProfileScreen(
+                            userId: carSpot.id,
+                            username: carSpot.username,
+                            userAvatar: carSpot.userAvatar,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundImage: NetworkImage(carSpot.userAvatar),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(carSpot.userAvatar),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => UserProfileScreen(
-                                userId: carSpot.id,
-                                username: carSpot.username,
-                                userAvatar: carSpot.userAvatar,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UserProfileScreen(
+                                  userId: carSpot.id,
+                                  username: carSpot.username,
+                                  userAvatar: carSpot.userAvatar,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            carSpot.username,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              size: 14,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              carSpot.location,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
                               ),
                             ),
-                          );
-                        },
-                        child: Text(
-                          carSpot.username,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '• ${carSpot.timeAgo}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            size: 14,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            carSpot.location,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '• ${carSpot.timeAgo}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.more_horiz, color: Colors.black),
-                  onPressed: () {
-                    // Show menu options
-                  },
-                ),
-              ],
-            ),
-          ),
-
-          // Car details banner
-          Container(
-            width: double.infinity,
-            color: Colors.blue.shade50,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.directions_car,
-                  color: Colors.blue.shade700,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '${carSpot.carYear} ${carSpot.carMake} ${carSpot.carModel}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blue.shade700,
+                  IconButton(
+                    icon: const Icon(Icons.more_horiz, color: Colors.black),
+                    onPressed: () {
+                      // Show menu options
+                    },
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          // Car image
-          Container(
-            width: double.infinity,
-            height: 300,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(carSpot.carImage),
-                fit: BoxFit.cover,
+                ],
               ),
             ),
-          ),
 
-          // Action buttons and stats
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Action buttons
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => onLikeToggle(carSpot.id),
-                      child: Row(
-                        children: [
-                          Icon(
-                            carSpot.isLiked
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: carSpot.isLiked ? Colors.red : Colors.black,
-                            size: 24,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            carSpot.likes.toString(),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
+            // Car details banner
+            Container(
+              width: double.infinity,
+              color: Colors.blue.shade50,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.directions_car,
+                    color: Colors.blue.shade700,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${carSpot.carYear} ${carSpot.carMake} ${carSpot.carModel}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.blue.shade700,
                     ),
-                    const SizedBox(width: 20),
-                    GestureDetector(
-                      onTap: () {
-                        showCommentsBottomSheet(
-                          context,
-                          carSpot.id,
-                          carSpot.comments,
-                        );
-                      },
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.chat_bubble_outline,
-                            color: Colors.black,
-                            size: 24,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            carSpot.comments.toString(),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle share tap
-                      },
-                      child: const Icon(
-                        Icons.share_outlined,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Car image
+            Container(
+              width: double.infinity,
+              height: 300,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(carSpot.carImage),
+                  fit: BoxFit.cover,
                 ),
-                const SizedBox(height: 8),
-                // Description
-                RichText(
-                  text: TextSpan(
-                    style: const TextStyle(fontSize: 14, color: Colors.black),
+              ),
+            ),
+
+            // Action buttons and stats
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Action buttons
+                  Row(
                     children: [
-                      TextSpan(
-                        text: carSpot.username,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      GestureDetector(
+                        onTap: () => onLikeToggle(carSpot.id),
+                        child: Row(
+                          children: [
+                            Icon(
+                              carSpot.isLiked
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: carSpot.isLiked
+                                  ? Colors.red
+                                  : Colors.black,
+                              size: 24,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              carSpot.likes.toString(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      TextSpan(text: ' ${carSpot.description}'),
+                      const SizedBox(width: 20),
+                      GestureDetector(
+                        onTap: () {
+                          showCommentsBottomSheet(
+                            context,
+                            carSpot.id,
+                            carSpot.comments,
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.chat_bubble_outline,
+                              color: Colors.black,
+                              size: 24,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              carSpot.comments.toString(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 20),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  // Description
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(fontSize: 14, color: Colors.black),
+                      children: [
+                        TextSpan(
+                          text: carSpot.username,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        TextSpan(text: ' ${carSpot.description}'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
