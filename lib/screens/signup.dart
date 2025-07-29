@@ -52,8 +52,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
         if (mounted) {
           if (userCredential != null && userCredential.user != null) {
-            // User is automatically logged in, navigate to homepage
-            Navigator.pushReplacementNamed(context, '/homepage');
+            // User is automatically logged in, navigate to spots page
+            Navigator.pushReplacementNamed(context, '/spots');
           } else {
             // Account created but user not logged in, redirect to login
             ScaffoldMessenger.of(context).showSnackBar(

@@ -1,38 +1,40 @@
 import 'package:flutter/material.dart';
-import '../components/bottom_navigation.dart';
-import '../components/navigation_handler.dart';
-import '../services/auth_service.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class UserProfileScreen extends StatefulWidget {
+  final String userId;
+  final String username;
+  final String userAvatar;
+
+  const UserProfileScreen({
+    super.key,
+    required this.userId,
+    required this.username,
+    required this.userAvatar,
+  });
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen>
+class _UserProfileScreenState extends State<UserProfileScreen>
     with SingleTickerProviderStateMixin {
-  int _selectedIndex = 4; // Profile tab is at index 4
-  final AuthService _authService = AuthService();
   late TabController _tabController;
+  bool _isFollowing = false;
 
   // Sample user data
   final List<String> userSpots = [
     'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     'https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     'https://images.unsplash.com/photo-1494905998402-395d579af36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1571068316344-75bc76f77890?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
   ];
 
   final List<String> userEvents = [
-    'https://images.unsplash.com/photo-1580414155545-c4726a5bd81f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'https://images.unsplash.com/photo-1549399084-d5db0b30e5d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    'https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
   ];
 
   final List<String> userQuests = [
-    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    'https://images.unsplash.com/photo-1571068316344-75bc76f77890?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
   ];
 
   @override
@@ -47,6 +49,12 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.dispose();
   }
 
+  void _toggleFollow() {
+    setState(() {
+      _isFollowing = !_isFollowing;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +62,12 @@ class _ProfileScreenState extends State<ProfileScreen>
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text(
-          _authService.getUserDisplayName() ?? 'Profile',
+          widget.username,
           style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -65,13 +77,9 @@ class _ProfileScreenState extends State<ProfileScreen>
         centerTitle: false,
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: Colors.black,
-              size: 26,
-            ),
+            icon: const Icon(Icons.more_horiz, color: Colors.black),
             onPressed: () {
-              Navigator.pushNamed(context, '/settings');
+              // Show more options
             },
           ),
         ],
@@ -90,11 +98,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                         // Profile picture and info
                         Row(
                           children: [
-                            const CircleAvatar(
+                            CircleAvatar(
                               radius: 40,
-                              backgroundImage: NetworkImage(
-                                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-                              ),
+                              backgroundImage: NetworkImage(widget.userAvatar),
                             ),
                             const SizedBox(width: 24),
                             Expanded(
@@ -122,15 +128,14 @@ class _ProfileScreenState extends State<ProfileScreen>
 
                         const SizedBox(height: 16),
 
-                        // Username and email
+                        // Username and bio
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _authService.getUserDisplayName() ??
-                                    'Anonymous User',
+                                widget.username,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -138,15 +143,70 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                _authService.getUserEmail() ?? '',
-                                style: const TextStyle(
+                              const Text(
+                                'Car enthusiast from Kigali 🚗',
+                                style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
                                 ),
                               ),
                             ],
                           ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // Follow/Message buttons
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: _toggleFollow,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: _isFollowing
+                                      ? Colors.grey.shade300
+                                      : Colors.blue,
+                                  foregroundColor: _isFollowing
+                                      ? Colors.black
+                                      : Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Text(
+                                  _isFollowing ? 'Following' : 'Follow',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  // Message functionality
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Messaging coming soon!'),
+                                    ),
+                                  );
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Message',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -180,22 +240,13 @@ class _ProfileScreenState extends State<ProfileScreen>
           controller: _tabController,
           children: [
             // Car Spots Tab
-            _buildGridView(userSpots, 'No Car Spots'),
+            _buildGridView(userSpots, 'No car spots'),
             // Events Tab
-            _buildGridView(userEvents, 'No Events'),
+            _buildGridView(userEvents, 'No events'),
             // Quests Tab
-            _buildGridView(userQuests, 'No Quests'),
+            _buildGridView(userQuests, 'No quests'),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavigation(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          NavigationHandler.handleNavigation(context, index);
-        },
       ),
     );
   }
@@ -237,8 +288,10 @@ class _ProfileScreenState extends State<ProfileScreen>
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            // Navigate to specific item based on tab
-            _navigateToItem(index);
+            // Handle item tap - navigate to specific item
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Item ${index + 1} tapped!')),
+            );
           },
           child: Container(
             decoration: BoxDecoration(
@@ -251,27 +304,6 @@ class _ProfileScreenState extends State<ProfileScreen>
         );
       },
     );
-  }
-
-  void _navigateToItem(int index) {
-    final currentTab = _tabController.index;
-    switch (currentTab) {
-      case 0: // Car Spots
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Navigate to car spot ${index + 1}')),
-        );
-        break;
-      case 1: // Events
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Navigate to event ${index + 1}')),
-        );
-        break;
-      case 2: // Quests
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Navigate to quest ${index + 1}')),
-        );
-        break;
-    }
   }
 
   Widget _buildStatColumn(String number, String label) {

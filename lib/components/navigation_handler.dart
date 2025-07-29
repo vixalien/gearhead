@@ -4,33 +4,23 @@ class NavigationHandler {
   static void handleNavigation(BuildContext context, int index) {
     switch (index) {
       case 0:
-        // Navigate to home
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/homepage',
-          (route) => false,
-        );
+        // Navigate to spots
+        Navigator.pushNamedAndRemoveUntil(context, '/spots', (route) => false);
         break;
       case 1:
-        // Navigate to search
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Search functionality coming soon!')),
-        );
+        // Navigate to events
+        Navigator.pushNamedAndRemoveUntil(context, '/events', (route) => false);
         break;
       case 2:
-        // Navigate to add
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/create_post',
-          (route) => false,
-        );
+        // Navigate to quests
+        Navigator.pushNamedAndRemoveUntil(context, '/quests', (route) => false);
         break;
       case 3:
         // Navigate to notifications
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Notifications functionality coming soon!'),
-          ),
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/notifications',
+          (route) => false,
         );
         break;
       case 4:

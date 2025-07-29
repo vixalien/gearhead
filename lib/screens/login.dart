@@ -34,9 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
-        // Navigate to homepage on successful login
+        // Navigate to spots page on successful login
         if (mounted) {
-          Navigator.pushReplacementNamed(context, '/homepage');
+          Navigator.pushReplacementNamed(context, '/spots');
         }
       } catch (e) {
         if (mounted) {

@@ -17,19 +17,19 @@ class CustomBottomNavigation extends StatelessWidget {
       onDestinationSelected: onDestinationSelected,
       destinations: const [
         NavigationDestination(
-          icon: Icon(Icons.home_outlined),
-          selectedIcon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.location_on_outlined),
+          selectedIcon: Icon(Icons.location_on),
+          label: 'Spots',
         ),
         NavigationDestination(
-          icon: Icon(Icons.search_outlined),
-          selectedIcon: Icon(Icons.search),
-          label: 'Search',
+          icon: Icon(Icons.event_outlined),
+          selectedIcon: Icon(Icons.event),
+          label: 'Events',
         ),
         NavigationDestination(
-          icon: Icon(Icons.add_circle_outline),
-          selectedIcon: Icon(Icons.add_circle),
-          label: 'Add',
+          icon: Icon(Icons.help_outline),
+          selectedIcon: Icon(Icons.help),
+          label: 'Quests',
         ),
         NavigationDestination(
           icon: Icon(Icons.notifications_outlined),

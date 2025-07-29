@@ -5,12 +5,19 @@ import 'firebase_options.dart';
 
 import 'screens/login.dart';
 import 'screens/signup.dart';
-import 'screens/homepage.dart';
+import 'screens/car_spots.dart';
+import 'screens/events.dart';
+import 'screens/quests.dart';
+import 'screens/notifications.dart';
 import 'screens/profile.dart';
 import 'screens/forgot_password.dart';
-import 'screens/create_post.dart';
 import 'screens/splash_screen.dart';
 import 'screens/settings.dart';
+import 'screens/add_spot.dart';
+import 'screens/add_event.dart';
+import 'screens/add_quest.dart';
+import 'screens/user_profile.dart';
+import 'screens/event_details.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,17 +38,32 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: FirebaseAuth.instance.currentUser != null
-          ? const HomepageScreen()
+          ? const CarSpotsScreen()
           : const SplashScreen(),
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/homepage': (context) => const HomepageScreen(),
+        '/spots': (context) => const CarSpotsScreen(),
+        '/events': (context) => const EventsScreen(),
+        '/quests': (context) => const QuestsScreen(),
+        '/notifications': (context) => const NotificationsScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/forgot_password': (context) => const ForgotPassword(),
-        '/create_post': (context) => const CreatePostScreen(),
         '/settings': (context) => const SettingsScreen(),
+        '/add_spot': (context) => const AddSpotScreen(),
+        '/add_event': (context) => const AddEventScreen(),
+        '/add_quest': (context) => const AddQuestScreen(),
+        '/user_profile': (context) {
+          final args =
+              ModalRoute.of(context)!.settings.arguments
+                  as Map<String, dynamic>;
+          return UserProfileScreen(
+            userId: args['userId'],
+            username: args['username'],
+            userAvatar: args['userAvatar'],
+          );
+        },
       },
     );
   }

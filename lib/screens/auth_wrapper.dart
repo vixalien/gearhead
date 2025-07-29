@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
 import 'splash_screen.dart';
-import 'homepage.dart';
+import 'car_spots.dart';
 
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
@@ -21,9 +21,9 @@ class AuthWrapper extends StatelessWidget {
           );
         }
 
-        // If user is signed in, show homepage
+        // If user is signed in, show car spots page
         if (snapshot.hasData && snapshot.data != null) {
-          return const HomepageScreen();
+          return const CarSpotsScreen();
         }
 
         // If user is not signed in, show splash screen
