@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 import '../main.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -11,165 +12,92 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _pushNotifications = true;
   bool _darkMode = false;
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    _darkMode = MyApp.isDarkMode;
+    // _darkMode = MyApp.isDarkMode;
   }
 
   void _toggleDarkMode(bool value) {
     setState(() {
       _darkMode = value;
     });
-    MyApp.toggleDarkMode();
-  }
-
-  void _signOut() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Sign Out'),
-          content: const Text('Are you sure you want to sign out?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/login',
-                  (route) => false,
-                );
-              },
-              child: const Text('Sign Out', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
+    // MyApp.toggleDarkMode();
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
+    void _handleLogout() async {
+      // Show confirmation dialog
+      final bool? shouldLogout = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Logout'),
+            content: const Text('Are you sure you want to logout?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Logout'),
+              ),
+            ],
+          );
+        },
+      );
+
+      // If user confirmed logout
+      if (shouldLogout == true) {
+        try {
+          await _authService.signOut();
+          // Navigate to splash screen after logout
+          if (mounted) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/splash',
+              (route) => false,
+            );
+          }
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.toString()),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pushReplacementNamed(context, '/profile'),
+        ),
+        title: Text("Settings"),
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            // Header Section
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
-                ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                      const Spacer(),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Logo Placeholder',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Row(
-                    children: [
-                      Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                      SizedBox(width: 12),
-                      Text(
-                        'Settings',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                ],
-              ),
-            ),
-            
             // Content Section
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    // User Profile Card
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          const CircleAvatar(
-                            radius: 25,
-                            backgroundImage: NetworkImage(
-                              'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            'John Doe',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: isDark ? Colors.white : Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    const SizedBox(height: 30),
-                    
                     // Account Settings Label
                     Align(
                       alignment: Alignment.centerLeft,
@@ -182,9 +110,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 20),
-                    
+
                     // Settings Options
                     Container(
                       decoration: BoxDecoration(
@@ -226,14 +154,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               );
                             },
                           ),
-                          
+
                           Divider(
                             height: 1,
                             color: Colors.grey[300],
                             indent: 20,
                             endIndent: 20,
                           ),
-                          
+
                           // Push Notifications
                           ListTile(
                             contentPadding: const EdgeInsets.symmetric(
@@ -258,14 +186,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               activeColor: const Color(0xFF4A90E2),
                             ),
                           ),
-                          
+
                           Divider(
                             height: 1,
                             color: Colors.grey[300],
                             indent: 20,
                             endIndent: 20,
                           ),
-                          
+
                           // Dark Mode
                           ListTile(
                             contentPadding: const EdgeInsets.symmetric(
@@ -289,12 +217,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    
+
                     const Spacer(),
-                    
+
                     // Sign Out Button
                     GestureDetector(
-                      onTap: _signOut,
+                      onTap: _handleLogout,
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Row(
@@ -318,7 +246,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 20),
                   ],
                 ),

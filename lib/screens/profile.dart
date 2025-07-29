@@ -28,60 +28,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     'https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
   ];
 
-  void _handleLogout() async {
-    // Show confirmation dialog
-    final bool? shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Logout'),
-            ),
-          ],
-        );
-      },
-    );
-
-    // If user confirmed logout
-    if (shouldLogout == true) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      try {
-        await _authService.signOut();
-        // Navigate to splash screen after logout
-        if (mounted) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/splash',
-            (route) => false,
-          );
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
-          );
-        }
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,8 +50,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: false,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black, size: 26),
-            onPressed: _isLoading ? null : _handleLogout,
+            icon: const Icon(
+              Icons.settings_outlined,
+              color: Colors.black,
+              size: 26,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
           ),
         ],
       ),
