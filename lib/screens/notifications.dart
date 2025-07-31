@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../components/bottom_navigation.dart';
+import '../components/navigation_handler.dart';
 
 class NotificationItem {
   final String title;
@@ -6,6 +8,9 @@ class NotificationItem {
   final String fullMessage;
   final String timeAgo;
   final Color backgroundColor;
+  final IconData icon;
+  final String type; // 'spot', 'event', 'quest', 'profile'
+  final String targetId;
   bool isRead;
   bool isExpanded;
 
@@ -15,6 +20,9 @@ class NotificationItem {
     required this.fullMessage,
     required this.timeAgo,
     required this.backgroundColor,
+    required this.icon,
+    required this.type,
+    required this.targetId,
     this.isRead = false,
     this.isExpanded = false,
   });
@@ -28,41 +36,74 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
+  int _selectedIndex = 3; // Notifications tab is selected
+
   List<NotificationItem> notifications = [
     NotificationItem(
-      title: 'Service Reminder',
-      message: 'Your car is due for brake service in 3 days',
-      fullMessage: 'Your car is due for brake service in 3 days. Please schedule an appointment with your preferred service center to ensure optimal vehicle performance and safety.',
+      title: 'New Car Spot',
+      message: 'John Doe spotted a Toyota Mark II near you',
+      fullMessage:
+          'John Doe spotted a beautiful Toyota Mark II near you in Kimisagara. Check out the modifications and see if you know the owner!',
       timeAgo: '2 hours ago',
       backgroundColor: const Color(0xFFE3F2FD),
+      icon: Icons.location_on,
+      type: 'spot',
+      targetId: 'spot_123',
     ),
     NotificationItem(
-      title: 'New Post',
-      message: 'John Doe posted a new photo of his BMW M3',
-      fullMessage: 'John Doe posted a new photo of his BMW M3. Check out the latest modifications and join the conversation with other car enthusiasts in the comments.',
+      title: 'Quest Response',
+      message: 'Someone responded to your turbo installation quest',
+      fullMessage:
+          'Mike from AutoTech Garage responded to your turbo installation quest. He has 5+ years experience and offers competitive pricing. Check his profile for reviews.',
       timeAgo: '4 hours ago',
       backgroundColor: const Color(0xFFE8F5E8),
+      icon: Icons.help,
+      type: 'quest',
+      targetId: 'quest_456',
     ),
     NotificationItem(
-      title: 'Engine Service',
-      message: 'Engine service completed successfully',
-      fullMessage: 'Engine service completed successfully at AutoCare Center. Your vehicle has been thoroughly inspected and all maintenance items have been addressed. Receipt and service details are available in your account.',
-      timeAgo: '1 day ago',
+      title: 'Event Reminder',
+      message: 'Toyota Meet Kigali is tomorrow at 10 AM',
+      fullMessage:
+          'Don\'t forget about the Toyota Meet Kigali event tomorrow at Amahoro Stadium. Bring your ride and meet fellow Toyota enthusiasts!',
+      timeAgo: '8 hours ago',
       backgroundColor: const Color(0xFFFFF3E0),
+      icon: Icons.event,
+      type: 'event',
+      targetId: 'event_789',
     ),
     NotificationItem(
       title: 'New Follower',
       message: 'Sarah Wilson started following you',
-      fullMessage: 'Sarah Wilson started following you on GearHead. Check out her profile to see her amazing car collection and connect with fellow automotive enthusiasts.',
-      timeAgo: '2 days ago',
+      fullMessage:
+          'Sarah Wilson started following you on GearHead. Check out her profile to see her amazing car collection and connect with fellow automotive enthusiasts.',
+      timeAgo: '1 day ago',
       backgroundColor: const Color(0xFFF3E5F5),
+      icon: Icons.person_add,
+      type: 'profile',
+      targetId: 'user_sarah',
     ),
     NotificationItem(
-      title: 'Tire Pressure Alert',
-      message: 'Low tire pressure detected in your vehicle',
-      fullMessage: 'Low tire pressure detected in your vehicle. Front left tire pressure is below recommended levels. Please check and inflate to proper PSI for safe driving.',
-      timeAgo: '3 days ago',
+      title: 'Event Invitation',
+      message: 'You\'re invited to the Drift Competition',
+      fullMessage:
+          'Rwanda Drift Club invited you to their upcoming drift competition at Nyamirambo Stadium. Registration closes in 3 days!',
+      timeAgo: '2 days ago',
       backgroundColor: const Color(0xFFFFEBEE),
+      icon: Icons.event_available,
+      type: 'event',
+      targetId: 'event_drift',
+    ),
+    NotificationItem(
+      title: 'Quest Completed',
+      message: 'Your brake repair quest has been completed',
+      fullMessage:
+          'AutoFix Garage has successfully completed your brake repair quest. Please leave a review and rating for the service provided.',
+      timeAgo: '3 days ago',
+      backgroundColor: const Color(0xFFE8F5E8),
+      icon: Icons.check_circle,
+      type: 'quest',
+      targetId: 'quest_brake',
     ),
   ];
 
@@ -81,28 +122,52 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     });
   }
 
+  void _navigateToItem(NotificationItem notification) {
+    switch (notification.type) {
+      case 'spot':
+        // Navigate to specific car spot
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Navigate to spot ${notification.targetId}')),
+        );
+        break;
+      case 'event':
+        // Navigate to specific event
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Navigate to event ${notification.targetId}')),
+        );
+        break;
+      case 'quest':
+        // Navigate to specific quest
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Navigate to quest ${notification.targetId}')),
+        );
+        break;
+      case 'profile':
+        // Navigate to user profile
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Navigate to profile ${notification.targetId}'),
+          ),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF5F5F5),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(
-            Icons.arrow_back,
-            color: isDark ? Colors.white : Colors.black,
-          ),
-        ),
         title: Text(
           'Notifications',
           style: TextStyle(
-            color: isDark ? Colors.white : Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
+            color: Theme.of(context).appBarTheme.foregroundColor,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: false,
@@ -125,17 +190,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         itemCount: notifications.length,
         itemBuilder: (context, index) {
           final notification = notifications[index];
-          
+
           return GestureDetector(
-            onTap: () => _toggleNotification(index),
+            onTap: () {
+              _toggleNotification(index);
+              _navigateToItem(notification);
+            },
             child: Container(
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -149,6 +217,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Notification icon
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: notification.backgroundColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            notification.icon,
+                            size: 20,
+                            color: isDark ? Colors.white : Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,17 +240,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
-                                  color: isDark ? Colors.white : Colors.black,
+                                  color: Theme.of(
+                                    context,
+                                  ).textTheme.bodyLarge?.color,
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                notification.isExpanded 
-                                    ? notification.fullMessage 
+                                notification.isExpanded
+                                    ? notification.fullMessage
                                     : notification.message,
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: isDark ? Colors.white70 : Colors.grey[700],
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.color
+                                      ?.withOpacity(0.8),
                                   height: 1.3,
                                 ),
                               ),
@@ -177,7 +265,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 notification.timeAgo,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: isDark ? Colors.white54 : Colors.grey[500],
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color
+                                      ?.withOpacity(0.6),
                                 ),
                               ),
                             ],
@@ -188,8 +280,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           width: 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: notification.isRead 
-                                ? Colors.transparent 
+                            color: notification.isRead
+                                ? Colors.transparent
                                 : const Color(0xFF4A90E2),
                             shape: BoxShape.circle,
                           ),
@@ -201,6 +293,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
             ),
           );
+        },
+      ),
+      bottomNavigationBar: CustomBottomNavigation(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          NavigationHandler.handleNavigation(context, index);
         },
       ),
     );
